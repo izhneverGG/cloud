@@ -15,7 +15,6 @@ import zh.config.FeignConfig;
  * @Author zhanghui
  * @Date 2020/8/14 11:24
  **/
-@Service
 @FeignClient(value = "auth",configuration = FeignConfig.class)
 public interface AuthFeignApi {
     @RequestMapping(value = "/token/check",method = {RequestMethod.POST})

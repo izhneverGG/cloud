@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @Author zhanghui
  * @Date 2020/8/12 18:19
  **/
-@Service
+@Controller
 public class RedisUtil {
 
     private final static Logger logger = LoggerFactory.getLogger(RedisUtil.class);
@@ -54,5 +55,9 @@ public class RedisUtil {
         }finally {
             return object;
         }
+    }
+
+    public boolean cancelStringValue(String key){
+        return redisTemplate.delete(key);
     }
 }

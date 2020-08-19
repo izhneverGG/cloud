@@ -1,4 +1,4 @@
-package zh.filter;
+package zh.Filter;
 
 import feign.RequestTemplate;
 

@@ -31,7 +31,6 @@ public class AuthController {
         }catch (Exception e){
             logger.error("getToken: "+e);
         }
-
         if(token.startsWith("ERROR")){
             return JsonResult.errorResult(token);
         }
@@ -44,12 +43,20 @@ public class AuthController {
                 return JsonResult.successResult("success");
             }
         }catch (Exception e){
-            logger.error("getToken: "+e);
+            e.printStackTrace();
+            logger.error("checkToken: "+e);
         }
         return JsonResult.errorResult();
     }
 
     public JsonResult outToken(HttpServletRequest request){
-        return null;
+        try{
+            if(authTokenService.quitLogin(request)){
+                return JsonResult.successResult("success");
+            }
+        }catch (Exception e){
+            logger.error("outToken: "+e);
+        }
+        return JsonResult.errorResult();
     }
 }

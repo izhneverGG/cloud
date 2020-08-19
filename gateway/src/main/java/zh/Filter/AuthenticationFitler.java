@@ -1,13 +1,12 @@
-package zh.filter;
+package zh.Filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import zh.Feign.AuthFeignApi;
@@ -25,14 +24,17 @@ public class AuthenticationFitler implements GlobalFilter, Ordered {
 
     @Autowired(required = true)
     AuthFeignApi authFeignApi;
+
     /**
-     * 拦截器，校验
+     * @description 全局拦截器，校验。
+     *        要点：
+     *          1. chain.filter，表示当前过滤器已通过，交给下个过滤器
+     *          2.
      * @param exchange
      * @param chain
      * @return
      */
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-     //   exchange.getRequest().getHeaders().set("Access-Control-Allow-Origin","*");
         String token = exchange.getRequest().getHeaders().getFirst("token");
          String id = exchange.getRequest().getHeaders().getFirst("id");
         String pwd = exchange.getRequest().getHeaders().getFirst("pwd");
@@ -46,13 +48,17 @@ public class AuthenticationFitler implements GlobalFilter, Ordered {
         User user = new User();
         user.setToken(token);
         user.setId(id);
-        user.setPwd(pwd);
         JsonResult result = authFeignApi.checkToken(user);
         if(!result.isSuccess()){
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
+            return Mono.defer(()->{
+                Exception ex = new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Token");
+                return Mono.error(ex);
+            });
         }
         //用户-资源权限校验
+        /*
+        * TODO
+        * */
         return chain.filter(exchange);
     }
 

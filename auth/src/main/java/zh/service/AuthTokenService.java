@@ -10,4 +10,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface AuthTokenService {
     String getToken(HttpServletRequest request);
     boolean checkToken(User user);
+    boolean quitLogin(HttpServletRequest request);
 }

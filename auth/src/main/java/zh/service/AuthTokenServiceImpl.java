@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import zh.bean.User;
-import zh.bean.JsonResult;
-import zh.utils.JwtUtil;
 import zh.utils.RedisUtil;
-import zh.utils.ToolUtil;
+import zh.utils.ToolUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,12 +22,18 @@ public class AuthTokenServiceImpl implements AuthTokenService{
     RedisUtil redisUtil;
 
     /**
-     * @decription 采取JWT的认证,一是考虑到没有授权的需求, 二是采用Auth2过于麻烦。
+     * @decription
+     *            新想法：AUTH2和JWT感觉都没有必要了，因为有IP作唯一性。
+     *            若Redis中以(id,ip)存储，那么检验登录为Redis中有此键值对则登录，请求ip与Redis中ip一致则同意访问。
+     *            同时这样，前端也不用在请求header中放token，也解决了登录唯一性的要求。
+     *
+     *            以下作废：
+     *            采取JWT的认证,一是考虑到没有授权的需求, 二是采用Auth2过于麻烦。
      *            获取token过程：
      *            1. 验证用户和密码是否正确, 正确则执行2, 否则返回
      *            2. JWT获取token
      *            3. 获得ip
-     *            4. token+ip存入Redis
+     *            4. token存入Redis
      *            5. 返回token
      *            下面这个是最刚开始的想法, 把授权的client信息放入数据库中, 然后取出, 相当于跳过了AUTH2的授权过程,
      *            直接来到了令牌(token)过程，那何必要用AUTH2呢？JWT就可以胜任了。
@@ -50,27 +54,42 @@ public class AuthTokenServiceImpl implements AuthTokenService{
         if(!checkUserAndPwd(id,pwd)){
             return "ERROR: Invalid Account Or Password";
         }
-        //2. 获取token
-        String token = JwtUtil.createToken(id);
-        //3. 获得ip
-        String ip = ToolUtil.getIpAddr(request);
+        //2. 获得ip
+        String ip = ToolUtils.getIpAddr(request);
+//        //3. 获取token
+//        String token = JwtUtils.createToken(id,ip);
+
         //4. 存入Redis, 默认30分钟过期
-        redisUtil.setHashValue(id, token+"."+ip);
+        redisUtil.setHashValue(id, ip);
         //5. 返回token
-        return token;
+        return ip;
     }
 
+    /**
+     * @description 校验token是否和Redis中一致
+     * @param user
+     * @return boolean
+     */
     public boolean checkToken(User user){
         String token = user.getToken();
         String tokenRedis = redisUtil.getHashStringValue(user.getId());
         if(StringUtils.isEmpty(token)||StringUtils.isEmpty(tokenRedis)){
             return false;
         }
-        if(tokenRedis.startsWith(token)){
+        if(tokenRedis.equals(token)){
             return true;
         }
-        System.out.println("false");
         return false;
+    }
+
+    /**
+     * @description 登出登录，移除Redis中的键值对
+     * @param request
+     * @return boolean
+     */
+    public boolean quitLogin(HttpServletRequest request){
+        String id = request.getHeader("id");
+        return redisUtil.cancelStringValue(id);
     }
 
     /**

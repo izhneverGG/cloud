@@ -48,6 +48,6 @@ public class AuthApi {
      */
     @RequestMapping("/out")
     public JsonResult outToken(HttpServletRequest request){
-        return null;
+        return authController.outToken(request);
     }
 }

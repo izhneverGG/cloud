@@ -1,4 +1,4 @@
-package zh.filter;
+package zh.Filter;
 
 import java.util.HashSet;
 
@@ -14,6 +14,7 @@ public class WhiteListFilter {
     private static HashSet<String> whiteUserList = new HashSet<String>();;
     static {
         whiteResourcesList.add("/auth/token/get");
+        whiteResourcesList.add("/auth/token/out");
         whiteUserList.add("zh");
     }
 

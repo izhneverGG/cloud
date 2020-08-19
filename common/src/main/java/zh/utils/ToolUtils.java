@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
  * @Date 2020/8/14 11:02
  **/
 @Component
-public class ToolUtil {
+public class ToolUtils {
     public static String getIpAddr(HttpServletRequest request) {
         String ipAddress = request.getHeader("x-forwarded-for");
         if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {

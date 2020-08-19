@@ -1,5 +1,6 @@
 package zh.bean;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 /**
@@ -14,7 +15,7 @@ public class User implements Serializable {
     private String pwd;
     private String token;
     private String path;
-    private String ip;
+    private HttpServletRequest request;
 
     /*------Getter&Setter实现-----*/
     public String getId() {
@@ -49,11 +50,11 @@ public class User implements Serializable {
         this.path = path;
     }
 
-    public String getIp() {
-        return ip;
+    public HttpServletRequest getRequest() {
+        return request;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }
