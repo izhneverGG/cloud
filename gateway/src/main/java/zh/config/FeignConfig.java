@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import zh.Filter.FeignInterceptor;
+import zh.filter.FeignInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,10 @@ public class FeignConfig {
         return Logger.Level.FULL;
     }
 
-    //feign拦截器，设置header信息
+    /**
+     * feign拦截器，设置header信息
+     * @return FeignInterceptor
+     */
     @Bean
     FeignInterceptor feignInterceptor() {
         return new FeignInterceptor();

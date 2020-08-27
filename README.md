@@ -16,25 +16,26 @@
 
     具体框架的版本(版本待定)在父pom.xml文件中的properties设置，子pom.xml也会有对应的版本。 
   ## 模块介绍
-    模块内各模块设置如下图(图上传不了...)：
-    
-    + API：对外接口，直接调用Controller中的方法，不涉及任何业务或功能
-    + Controller：业务功能实现类，实现业务功能，只有这里才会有try catch，一个方法可能会调用多个ServiceImpl()方法，
-    + Service：功能声明接口，interface不作任何实现
-    + ServiceImpl：功能接口实现类，实现Service中的方法，不涉及业务，只实现功能，也没有try catch
-    + Dao：简单语句会使用注解/Mybatis-Plus实现，复杂采用xml的自定义sql
-    + 其他：bean、utils工具
+      模块内各模块设置如下图(图上传不了...)：
+      
+      + API：对外接口，直接调用Controller中的方法，不涉及任何业务或功能
+      + Controller：业务功能实现类，实现业务功能，只有这里才会有try catch，一个方法可能会调用多个ServiceImpl()方法，
+      + Service：功能声明接口，interface不作任何实现
+      + ServiceImpl：功能接口实现类，实现Service中的方法，不涉及业务，只实现功能，也没有try catch
+      + Dao：简单语句会使用注解/Mybatis-Plus实现，复杂采用xml的自定义sql
+      + 其他：bean、utils工具
     
   ### Auth
-    这个模块我想了很久，在V1.0的时候采用了OAUTH2，但是由于不需要授权，只需要令牌即可，所以我改采用JWT。然后用了JWT后，因为是需要  
-    把token存在Redis(Redis我理解成为一个另类的session)，  相当于从JWT的无状态判定来到了有状态，感觉违反了JWT的初衷。在最后，  
-    我反而觉得token随便是什么字符串都行，因为Redis会存储它。我可以用Redis判断是否登录、是否过期、是否匹配。所以在最后我把IP  
-    设置token使用。
+  这个模块我想了很久，在V1.0的时候采用了OAUTH2，但是由于不需要授权，只需要令牌即可，所以我改采用JWT。然后用了JWT后，因为是需要把token存在Redis(Redis我理解成为一个另类的session)，  相当于从JWT的无状态判定来到了有状态，感觉违反了JWT的初衷。在最后，我反而觉得token随便是什么字符串都行，因为Redis会存储它。我可以用Redis判断是否登录、是否过期、是否匹配。所以在最后我把IP设置token使用。
     
   ### GateWay
-    目前GateWay只是有一个GlobalFilter，后面会陆续添加转发路由过滤器、熔断器等。
+  目前GateWay有请求记录拦截器，请求判断拦截器。后面会陆续添加转发路由过滤器、熔断器等.
     
 # 版本
+  ## Version 1.2 (2020/8/27)
+  >
+   1. 根据阿里巴巴编码手册修改了错误编码格式
+   2. 增加请求前拦截器，添加请求信息、记录请求信息
   ## Version 1.1 (2020/8/19)
   >
    1. 增加Hystrix, Ribbon的超时配置
@@ -45,6 +46,6 @@
   
   ## Version 1.0 (2020-8-17)
   >
-   1.完成主体框架搭建
-   2.完成GateWay模块路由配置
-   3.完成Auth模块JWT的Token生成
+   1. 完成主体框架搭建
+   2. 完成GateWay模块路由配置
+   3. 完成Auth模块JWT的Token生成

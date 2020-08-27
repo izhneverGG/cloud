@@ -1,4 +1,4 @@
-package zh.Filter;
+package zh.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import zh.Feign.AuthFeignApi;
+import zh.feign.AuthFeignApi;
 import zh.bean.JsonResult;
 import zh.bean.User;
 
@@ -20,29 +20,28 @@ import zh.bean.User;
  * @Date 2020/8/12 14:56
  **/
 @Controller
-public class AuthenticationFitler implements GlobalFilter, Ordered {
+public class GlobalAuthFitler implements GlobalFilter, Ordered {
 
     @Autowired(required = true)
     AuthFeignApi authFeignApi;
 
     /**
-     * @description 全局拦截器，校验。
-     *        要点：
-     *          1. chain.filter，表示当前过滤器已通过，交给下个过滤器
-     *          2.
+     * @description 全局拦截器，校验。要点：chain.filter，表示当前过滤器已通过，交给下个过滤器
      * @param exchange
      * @param chain
      * @return
      */
+    @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String token = exchange.getRequest().getHeaders().getFirst("token");
-         String id = exchange.getRequest().getHeaders().getFirst("id");
+        String id = exchange.getRequest().getHeaders().getFirst("id");
         String pwd = exchange.getRequest().getHeaders().getFirst("pwd");
         String path = exchange.getRequest().getPath().toString();
 
         //是否为白名单
-        if(WhiteListFilter.isWhiteUser(id)||WhiteListFilter.isWhiteResources(path))
+        if(WhiteListFilter.isWhiteUser(id)||WhiteListFilter.isWhiteResources(path)){
             return chain.filter(exchange);
+        }
 
         //token校验
         User user = new User();
@@ -62,7 +61,8 @@ public class AuthenticationFitler implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
 
+    @Override
     public int getOrder() {
-        return -100;
+        return -10;
     }
 }

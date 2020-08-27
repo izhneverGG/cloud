@@ -22,7 +22,7 @@ public class AuthApi {
     AuthController authController;
 
     /**
-     * @decription 登录获取token
+     * 登录获取token
      * @param request
      * @return JsonResult
      */
@@ -32,7 +32,7 @@ public class AuthApi {
     }
 
     /**
-     * @decription 验证用户token及资源权限
+     * 验证用户token及资源权限
      * @param user
      * @return JsonResult
      */
@@ -42,7 +42,7 @@ public class AuthApi {
     }
 
     /**
-     * @decription 退出登录
+     * 退出登录
      * @param request
      * @return JsonResult
      */

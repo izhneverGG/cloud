@@ -1,10 +1,10 @@
-package zh.Filter;
+package zh.filter;
 
 import feign.RequestTemplate;
 
 /**
  * @ClassName FeignInterceptor
- * @Description TODO
+ * @Description Feign调用增加header属性
  * @Author zhanghui
  * @Date 2020/8/17 14:03
  **/

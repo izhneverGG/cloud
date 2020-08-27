@@ -18,6 +18,7 @@ public class User implements Serializable {
     private HttpServletRequest request;
 
     /*------Getter&Setter实现-----*/
+
     public String getId() {
         return id;
     }

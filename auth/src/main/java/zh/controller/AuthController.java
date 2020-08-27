@@ -23,6 +23,7 @@ public class AuthController {
     AuthTokenService authTokenService;
 
     private final static Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private final static String ERROR_KEY="ERROR";
 
     public JsonResult getToken(HttpServletRequest request){
         String token = null;
@@ -31,7 +32,7 @@ public class AuthController {
         }catch (Exception e){
             logger.error("getToken: "+e);
         }
-        if(token.startsWith("ERROR")){
+        if(token.startsWith(ERROR_KEY)){
             return JsonResult.errorResult(token);
         }
         return JsonResult.successResult((Object)token);
