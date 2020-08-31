@@ -20,7 +20,7 @@ import zh.bean.User;
  * @Date 2020/8/12 14:56
  **/
 @Controller
-public class GlobalAuthFitler implements GlobalFilter, Ordered {
+public class GlobalAuthFilter implements GlobalFilter, Ordered {
 
     @Autowired(required = true)
     AuthFeignApi authFeignApi;
@@ -38,12 +38,12 @@ public class GlobalAuthFitler implements GlobalFilter, Ordered {
         String pwd = exchange.getRequest().getHeaders().getFirst("pwd");
         String path = exchange.getRequest().getPath().toString();
 
-        //是否为白名单
+        // 是否为白名单
         if(WhiteListFilter.isWhiteUser(id)||WhiteListFilter.isWhiteResources(path)){
             return chain.filter(exchange);
         }
 
-        //token校验
+        // token校验
         User user = new User();
         user.setToken(token);
         user.setId(id);
@@ -54,10 +54,10 @@ public class GlobalAuthFitler implements GlobalFilter, Ordered {
                 return Mono.error(ex);
             });
         }
-        //用户-资源权限校验
+
         /*
-        * TODO
-        * */
+         * TODO 用户-资源权限校验
+         */
         return chain.filter(exchange);
     }
 

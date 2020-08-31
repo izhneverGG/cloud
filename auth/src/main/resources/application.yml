@@ -17,3 +17,7 @@ spring:
       max-idle: 10    #redis最大空闲链接
       min-idle: 0     #redis最小空闲链接
     timeout: 2000     #redis超时时间，毫秒
+logging:
+  config: classpath:./log/logging.xml
+logValue:
+  consoleLevel: info

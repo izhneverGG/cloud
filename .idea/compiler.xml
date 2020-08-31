@@ -9,6 +9,7 @@
         <module name="usercenter" />
         <module name="common" />
         <module name="gateway" />
+        <module name="test" />
         <module name="auth" />
       </profile>
     </annotationProcessing>

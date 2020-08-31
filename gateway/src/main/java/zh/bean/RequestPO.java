@@ -35,11 +35,6 @@ public class RequestPO implements Serializable {
     private String path;
 
     /**
-     * 请求响应完成时间，单位ms
-     */
-    private int length;
-
-    /**
      * 请求响应状态
      */
     private int status;
@@ -73,14 +68,6 @@ public class RequestPO implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
     }
 
     public int getStatus() {

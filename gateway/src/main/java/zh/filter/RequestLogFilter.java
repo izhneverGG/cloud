@@ -45,16 +45,10 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
         requestPO.setTime(LocalDateTime.now());
         requestPO.setIp(newRequest.getRemoteAddress().toString());
 
+        /*
+         * TODO 记录每次请求信息，存入Mysql数据库
+         */
         return chain.filter(exchange.mutate().request(newRequest).response(exchange.getResponse()).build());
-//        long start = System.nanoTime();
-//        return chain.filter(exchange).then(Mono.fromRunnable(()->{
-//            long end = System.nanoTime();
-//            ServerHttpResponse serverHttpRequest = exchange.getResponse();
-//            serverHttpRequest.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-//            System.out.println("status:"+serverHttpRequest.getStatusCode().value());
-//            requestPO.setLength(Integer.parseInt(((String.valueOf((end-start)/1000000)))));
-//
-//        }));
     }
 
     /**
